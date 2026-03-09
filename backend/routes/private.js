@@ -28,16 +28,6 @@ router.put("/livros/:id", async (req, res) => {
 
         let {numero,nome,gen,autor,status,emprestimo,img} = req.body
 
-         const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${nome}&key=${process.env.GOOGLE_API_KEY}`);
-
-        const data = await response.json();
-
-        const livro = data.items[0];
-
-        img = livro.volumeInfo.imageLinks.thumbnail.replace("zoom=1", "zoom=4");
-        
-
-
         await livros.findByIdAndUpdate(id,{
             numero,
             nome,
