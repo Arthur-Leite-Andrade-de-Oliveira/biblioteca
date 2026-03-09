@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
 function Biblioteca() {
-    const [l, setLivros] = useState()
+    const [l, setLivros] = useState([])
 
     const [filtroNumero, setFiltroNumero] = useState("")
     const [filtroNome, setFiltroNome] = useState("")
