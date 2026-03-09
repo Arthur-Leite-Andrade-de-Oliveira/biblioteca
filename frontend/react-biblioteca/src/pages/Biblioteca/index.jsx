@@ -25,6 +25,13 @@ function Biblioteca() {
             try {
                 const token = localStorage.getItem("token")
 
+                if (!token) {
+                    navigate("/")
+                    return
+                }
+
+                console.log("TOKEN:", localStorage.getItem("token"))
+
                 const { data: livros } = await api.get("/livros", {
                     headers: { Authorization: `Bearer ${token}` }
                 })
@@ -32,9 +39,9 @@ function Biblioteca() {
                 console.log(livros)
 
 
-                setLivros(livros)
+                setLivros(Array.isArray(livros) ? livros : [])
             } catch (err) {
-                if (err.status == 401) {
+                if (err.response?.status === 401) {
                     navigate("/")
                 }
             }
@@ -93,7 +100,7 @@ function Biblioteca() {
                 <div className="mt-7 w-full bg-gray-300 rounded-2xl h-170 overflow-y-auto p-4">
 
                     <ul className="grid grid-cols-6 gap-7">
-                        {l && l.filter((livro) => {
+                        {Array.isArray(l) && l.filter((livro) => {
                             return (
                                 String(livro.numero || "").toLowerCase().includes(filtroNumero.toLowerCase()) &&
                                 (livro.nome || "").toLowerCase().includes(filtroNome.toLowerCase()) &&
@@ -105,13 +112,13 @@ function Biblioteca() {
                         }).map((livro) => (
                             <Link key={livro._id} className="relative w-40 cursor-pointer group" to={`/biblioteca/editar-livro/${livro._id}`}>
                                 <li >
-                                    {livro.img != "" &&(
-                                    <img
-                                        src={livro?.img.replace("http", "https")}
-                                        alt={livro.nome}
-                                        className="w-full h-full object-cover rounded-lg"
-                                    />)}
-                                    
+                                    {livro.img != "" && (
+                                        <img
+                                            src={livro?.img.replace("http", "https")}
+                                            alt={livro.nome}
+                                            className="w-full h-full object-cover rounded-lg"
+                                        />)}
+
                                     <p className="text-center">{livro.nome}</p>
 
                                     {livro.status && (
@@ -120,7 +127,7 @@ function Biblioteca() {
                                         </div>
                                     )}
 
-                                    {livro.status===false && (
+                                    {livro.status === false && (
                                         <div className="absolute inset-0 bg-green-500/20 rounded-lg flex items-center justify-center text-white font-bold">
                                             Livre
                                         </div>

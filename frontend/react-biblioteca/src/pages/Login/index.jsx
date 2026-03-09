@@ -21,6 +21,9 @@ function Login() {
             localStorage.setItem("token", token)
             console.log(localStorage.getItem("token"))
 
+            console.log("API URL:", import.meta.env.API_URL)
+
+            alert("")
             navigate("/biblioteca")
 
         } catch (err) {
